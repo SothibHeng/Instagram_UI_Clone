@@ -1,92 +1,175 @@
 import 'package:flutter/material.dart';
-import '../../core/widgets/custom_pageview.dart';
 
-// Custom PostCard widget
 class PostCard extends StatelessWidget {
+  final String userProfile;
   final String userName;
-  final List<String> imageUrls;
-  final String postCaption;
-  final String profileImageUrl;
+  final List<String> imageUrl;
+  final String caption;
+  final String likeCount;
+  final String commentCount;
+  final String shareCount;
+  final String? postTime;
 
-  // Constructor to accept parameters
   const PostCard({
-    Key? key,
+    super.key,
+    required this.userProfile,
     required this.userName,
-    required this.imageUrls,
-    required this.postCaption,
-    required this.profileImageUrl,
-  }) : super(key: key);
+    required this.imageUrl,
+    required this.caption,
+    required this.likeCount,
+    required this.commentCount,
+    required this.shareCount,
+    this.postTime,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+    return Container(
+      // margin: const EdgeInsets.all(10),
+      // padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header with User and time
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(profileImageUrl), // User profile picture
-                  radius: 20,
+                Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(userProfile),
+                      radius: 20,
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          userName,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        if (postTime != null)
+                          Text(
+                            postTime!,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
                 ),
-                SizedBox(width: 10),
-                Text(
-                  userName, // User name
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Spacer(),
-                Icon(Icons.more_vert), // Option button (for more options)
+                const Icon(Icons.more_vert),
               ],
             ),
           ),
 
-          // Post image
-          Container(
-            width: double.infinity,
-            height: 250,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(imageUrls.isNotEmpty ? imageUrls[0] : ''), // Post image
-                fit: BoxFit.cover,
-              ),
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(15),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: SizedBox(
+              height: 420,
+              child: PageView.builder(
+                itemCount: imageUrl.length,
+                itemBuilder: (context, index) {
+                  return Image.network(
+                    imageUrl[index],
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  );
+                },
               ),
             ),
           ),
+
 
           // Post actions (like, comment, share)
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(Icons.favorite_border, size: 30),
-                SizedBox(width: 20),
-                Icon(Icons.comment_outlined, size: 30),
-                SizedBox(width: 20),
-                Icon(Icons.share_outlined, size: 30),
+                Row(
+                  children: [
+                    _PostActionButton(
+                      imagePath: 'https://cdn-icons-png.flaticon.com/128/711/711349.png',
+                      count: likeCount,
+                      size: 22,
+                    ),
+                    const SizedBox(width: 20),
+                    _PostActionButton(
+                      imagePath: 'https://cdn-icons-png.flaticon.com/128/3031/3031126.png',
+                      count: commentCount,
+                      size: 22,
+                    ),
+                    const SizedBox(width: 20),
+                    _PostActionButton(
+                      imagePath: 'https://cdn-icons-png.flaticon.com/128/12030/12030256.png',
+                      count: shareCount,
+                      size: 24,
+                    ),
+                  ],
+                ),
+                const Icon(Icons.bookmark_border),
               ],
             ),
           ),
 
-          // Custom PageView for displaying multiple images
-          CustomPageView(imageUrls: imageUrls), // Use the custom widget here
-
+          // Caption Text
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.only(left: 12, bottom: 10),
             child: Text(
-              postCaption, // Post caption
-              style: TextStyle(color: Colors.black54),
+              caption,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black87,
+              ),
+              textAlign: TextAlign.start,
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _PostActionButton extends StatelessWidget {
+  final String imagePath;
+  final String count;
+  final double size;
+
+  const _PostActionButton({
+    required this.imagePath,
+    required this.count,
+    required this.size,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Image.network(
+          imagePath,
+          width: size,
+          height: size,
+        ),
+        const SizedBox(width: 4),
+        Text(
+          count,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }

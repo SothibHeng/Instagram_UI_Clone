@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:instagram_app/core/widgets/app_bar.dart';
 import 'package:instagram_app/core/widgets/navigation_bar.dart';
 import 'package:instagram_app/core/widgets/story.dart';
+import 'package:instagram_app/view/widgets/post_card.dart';
 
-import '../../core/widgets/custom_pageview.dart';
 import '../../core/widgets/profile.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,15 +11,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    // Post images URL
-    final List<String> imageUrls = [
-      'https://i.pinimg.com/736x/2e/d5/16/2ed5164d032d18b2e9043135cd3d13dd.jpg',
-      'https://i.pinimg.com/736x/c1/2f/a6/c12fa65a639f1df3ff6b9e4cc2ae67e3.jpg',
-      'https://i.pinimg.com/736x/21/f9/f6/21f9f6895159f5a0f9f8d09128c009fd.jpg',
-      'https://i.pinimg.com/736x/5f/61/3b/5f613b70192adfab0b8b39a549aa929e.jpg',
-      'https://i.pinimg.com/736x/a5/95/e1/a595e145a159c45fde3f40159b3b9369.jpg'
-    ];
 
     return Scaffold(
       appBar: const CustomAppBar(),
@@ -75,8 +66,20 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            child: CustomPageView(imageUrls: imageUrls), // Use the custom widget
+          const PostCard(
+              userProfile: 'https://i.pinimg.com/474x/22/49/a8/2249a80c407518140922bea0bab6420d.jpg',
+              userName: 'Sorry',
+              imageUrl: [
+                'https://i.pinimg.com/736x/2e/d5/16/2ed5164d032d18b2e9043135cd3d13dd.jpg',
+                'https://i.pinimg.com/736x/c1/2f/a6/c12fa65a639f1df3ff6b9e4cc2ae67e3.jpg',
+                'https://i.pinimg.com/736x/21/f9/f6/21f9f6895159f5a0f9f8d09128c009fd.jpg',
+                'https://i.pinimg.com/736x/5f/61/3b/5f613b70192adfab0b8b39a549aa929e.jpg',
+                'https://i.pinimg.com/736x/a5/95/e1/a595e145a159c45fde3f40159b3b9369.jpg'
+              ],
+              caption: 'I love you',
+              likeCount: '3456',
+              commentCount: '4567',
+              shareCount: '345',
           ),
         ],
       ),
